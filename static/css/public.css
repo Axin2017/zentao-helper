@@ -1,0 +1,8 @@
+.float-right{
+    float: right;
+}
+.fixclear:after{
+    content: '';
+    display: block;
+    clear: both;
+}
