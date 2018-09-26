@@ -3,6 +3,8 @@
         <el-table :data="storyList" stripe style="width: 100%" :default-sort="{prop: 'assigneddate', order: 'descending'}" v-loading="loading">
             <el-table-column prop="id" label="id" sortable>
             </el-table-column>
+            <el-table-column prop="project" label="项目名称" width="200" :formatter="projectFormatter" sortable>
+            </el-table-column>
             <el-table-column prop="title" label="需求名称" width="200" sortable>
             </el-table-column>
             <el-table-column prop="stage" label="阶段"  sortable>
@@ -21,7 +23,7 @@
             </el-table-column>
             <el-table-column prop="lastediteddate" label="最后编辑时间" :formatter="dateFormatter" sortable>
             </el-table-column>
-            <el-table-column prop="deleted" label="是否删除" sortable>
+            <el-table-column prop="deleted" label="是否删除" v-if="showDeleted" sortable>
             </el-table-column>
         </el-table>
     </div>
@@ -31,7 +33,7 @@
 import axios from 'axios';
 export default {
     name: 'StoryList',
-    props: ['condition', 'index', 'activedIndex'],
+    props: ['condition', 'index', 'activedIndex','showDeleted'],
     data() {
         return {
             storyList: [],
@@ -48,6 +50,9 @@ export default {
             } else {
                 return '';
             }
+        },
+        projectFormatter(row, column) {
+            return this.projectMappingObj[row.project];
         },
         donePercentFormatter(row, column) {
             if (row.estimate == 0) {
@@ -82,6 +87,9 @@ export default {
     computed: {
         menuIndex() {
             return this.$store.state.activedIndex;
+        },
+        projectMappingObj() {
+            return this.$store.getters.projectMappingObj;
         }
     },
     watch: {

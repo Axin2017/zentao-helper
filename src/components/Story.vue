@@ -1,8 +1,9 @@
 <template>
     <page>
-        <div slot="toolbar">
+        <div slot="toolbar"  class="fixclear">
             <div class="serch-box float-right">
-                <serch-box v-model="currentId" placeholder="输入需求id查询" />
+                <el-input placeholder="输入需求id查询" v-model="currentId" prefix-icon="el-icon-search" clearable @keyup.enter.native="serch" @change="serchId">
+                </el-input>
             </div>
             <div class="showdeleted-box float-right">
                 <el-checkbox v-model="showDeleted">显示已删除项</el-checkbox>
@@ -11,7 +12,7 @@
         <div slot="content">
             <el-tabs type="border-card" @tab-click="changeTab">
                 <el-tab-pane v-for="tab in tabMenu" :label="tab.label" :key="tab.index" lazy>
-                    <story-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" />
+                    <story-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" :showDeleted="showDeleted" />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -21,13 +22,11 @@
 <script>
 import axios from 'axios';
 import StoryList from './StoryList';
-import SerchBox from '@/components/public/SerchBox';
 import Page from '@/components/public/Page';
 export default {
     name: 'Story',
     components: {
         StoryList,
-        SerchBox,
         Page
     },
     data() {
@@ -53,11 +52,8 @@ export default {
     methods: {
         changeTab(tab, event) {
             this.activedIndex = tab.index;
-        }
-    },
-    created() {},
-    watch: {
-        currentId() {
+        },
+        serchId() {
             if (this.currentId) {
                 this.currentIdCondition = [
                     { name: 'id', value: this.currentId }
@@ -65,7 +61,10 @@ export default {
             } else {
                 this.currentIdCondition = [];
             }
-        },
+        }
+    },
+    created() {},
+    watch: {
         showDeleted() {
             if (this.showDeleted) {
                 this.currentShowDeletedCondition = [];

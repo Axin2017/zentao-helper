@@ -2,8 +2,7 @@
     <page>
         <div slot="toolbar" class="fixclear">
             <div class="serch-box float-right">
-                <!--<serch-box v-model="currentUser" placeholder="输入用户名查询" />-->
-                <el-input placeholder="输入用户名查询" v-model="currentUser" prefix-icon="el-icon-search" clearable @keyup.enter.native="serch" @change="serch">
+                <el-input placeholder="输入用户名查询" v-model="currentUser" prefix-icon="el-icon-search" clearable @keyup.enter.native="serchUser" @change="serchUser">
                 </el-input>
             </div>
             <div class="project-box float-right">
@@ -19,7 +18,7 @@
         <div slot="content">
             <el-tabs type="border-card" @tab-click="changeTab">
                 <el-tab-pane v-for="tab in tabMenu" :label="tab.label" :key="tab.index" lazy>
-                    <task-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" />
+                    <task-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" :showDeleted="showDeleted" />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -29,13 +28,11 @@
 <script>
 import axios from 'axios';
 import TaskList from './TaskList';
-import SerchBox from '@/components/public/SerchBox';
 import Page from '@/components/public/Page';
 export default {
     name: 'Task',
     components: {
         TaskList,
-        SerchBox,
         Page
     },
     data() {
@@ -77,7 +74,7 @@ export default {
             this.activedIndex = tab.index;
             this.currentTaskTypeCondition = this.taskConsitionTypes[tab.index];
         },
-        serch() {
+        serchUser() {
             if (this.currentUser) {
                 this.currentUserCondition = [
                     { name: 'assignedTo', value: this.currentUser }

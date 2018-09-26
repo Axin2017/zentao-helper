@@ -25,9 +25,12 @@
             </el-table-column>
             <el-table-column prop="left" label="进度百分比" :formatter="donePercentFormatter" sortable>
             </el-table-column>
-            <el-table-column prop="deadline" label="截止时间" :formatter="dateFormatter" sortable>
+            <el-table-column label="截止时间" sortable>
+                <template slot-scope="scope">
+                    <span :class="{dead:scope.row._isDead}">{{ scope.row.deadline }}</span>
+                </template>
             </el-table-column>
-            <el-table-column prop="deleted" label="是否删除" sortable>
+            <el-table-column prop="deleted" label="是否删除" v-if="showDeleted" sortable>
             </el-table-column>
         </el-table>
     </div>
@@ -37,7 +40,7 @@
 import axios from 'axios';
 export default {
     name: 'TaskList',
-    props: ['condition', 'index', 'activedIndex'],
+    props: ['condition', 'index', 'activedIndex', 'showDeleted'],
     data() {
         return {
             taskList: [],
@@ -63,9 +66,28 @@ export default {
                 return 0;
             } else {
                 return (
-                    ((row.estimate - row.left) / row.estimate * 100).toFixed() + '%'
+                    ((row.estimate - row.left) / row.estimate * 100).toFixed() +
+                    '%'
                 );
             }
+        },
+        judgeDeadline(taskList) {
+            return taskList.map(task => {
+                const column = { property: 'deadline' };
+                const formatedDate = this.dateFormatter(task, column);
+                task.deadline = formatedDate;
+                const deadDate = new Date(formatedDate);
+                if (
+                    deadDate != 'Invalid Date' &&
+                    task.status != 'done' &&
+                    task.status != 'closed'
+                ) {
+                    if (deadDate < new Date()) {
+                        task._isDead = true;
+                    }
+                }
+                return task;
+            });
         },
         getData() {
             this.loading = true;
@@ -75,7 +97,8 @@ export default {
                 data: { query: this.condition }
             })
                 .then(res => {
-                    this.taskList = res.data.data;
+                    var data = res.data.data;
+                    this.taskList = this.judgeDeadline(data);
                 })
                 .catch(e => {
                     console.log(e);
@@ -119,5 +142,10 @@ export default {
 .content {
     max-width: 1366px;
     margin: 0 auto;
+}
+.dead {
+    background-color: red;
+    color: #fff;
+    display: block;
 }
 </style>

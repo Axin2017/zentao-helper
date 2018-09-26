@@ -15,7 +15,6 @@ export default {};
     margin: 0 auto;
 }
 .toolbar {
-    height: 50px;
     padding: 10px;
     padding-top: 30px;
 }
