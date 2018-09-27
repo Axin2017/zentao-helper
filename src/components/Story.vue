@@ -2,7 +2,7 @@
     <page>
         <div slot="toolbar"  class="fixclear">
             <div class="serch-box float-right">
-                <el-input placeholder="输入需求id查询" v-model="currentId" prefix-icon="el-icon-search" clearable @keyup.enter.native="serch" @change="serchId">
+                <el-input placeholder="输入需求id查询" v-model="currentId" prefix-icon="el-icon-search" clearable  @change="serchId">
                 </el-input>
             </div>
             <div class="showdeleted-box float-right">

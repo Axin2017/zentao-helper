@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="taskList" stripe style="width: 100%" :default-sort="{prop: 'assigneddate', order: 'descending'}" v-loading="loading">
+        <el-table :data="taskList" stripe style="width: 100%" :default-sort="{prop: 'assigneddate', order: 'descending'}" v-loading="loading" row-key="id">
             <el-table-column prop="id" label="id" sortable>
             </el-table-column>
             <el-table-column prop="project" label="项目名称" width="200" :formatter="projectFormatter" sortable>
@@ -28,6 +28,7 @@
             <el-table-column label="截止时间" sortable>
                 <template slot-scope="scope">
                     <span :class="{dead:scope.row._isDead}">{{ scope.row.deadline }}</span>
+                    <time-left v-if="'done,closed'.indexOf(scope.row.status)==-1" :deadtime="scope.row.deadline" :containsToday="true"></time-left>
                 </template>
             </el-table-column>
             <el-table-column prop="deleted" label="是否删除" v-if="showDeleted" sortable>
@@ -38,6 +39,7 @@
 
 <script>
 import axios from 'axios';
+import TimeLeft from './public/TimeLeft';
 export default {
     name: 'TaskList',
     props: ['condition', 'index', 'activedIndex', 'showDeleted'],
@@ -62,16 +64,17 @@ export default {
             return this.projectMappingObj[row.project];
         },
         donePercentFormatter(row, column) {
-            if (row.estimate == 0) {
+            if (row.consumed == 0) {
                 return 0;
             } else {
                 return (
-                    ((row.estimate - row.left) / row.estimate * 100).toFixed() +
+                    (row.consumed / (row.consumed+row.left) * 100).toFixed() +
                     '%'
                 );
             }
         },
         judgeDeadline(taskList) {
+            const now=new Date();
             return taskList.map(task => {
                 const column = { property: 'deadline' };
                 const formatedDate = this.dateFormatter(task, column);
@@ -82,7 +85,8 @@ export default {
                     task.status != 'done' &&
                     task.status != 'closed'
                 ) {
-                    if (deadDate < new Date()) {
+                    //当天不算超期
+                    if (Math.round((deadDate-now)/1000/60/60/24)+1 < 0) {
                         task._isDead = true;
                     }
                 }
@@ -126,6 +130,9 @@ export default {
         taskList() {
             this.loading = false;
         }
+    },
+    components:{
+        TimeLeft
     }
 };
 </script>

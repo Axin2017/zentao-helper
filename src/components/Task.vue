@@ -2,7 +2,7 @@
     <page>
         <div slot="toolbar" class="fixclear">
             <div class="serch-box float-right">
-                <el-input placeholder="输入用户名查询" v-model="currentUser" prefix-icon="el-icon-search" clearable @keyup.enter.native="serchUser" @change="serchUser">
+                <el-input placeholder="输入用户名查询" v-model="currentUser" prefix-icon="el-icon-search" clearable @change="serchUser">
                 </el-input>
             </div>
             <div class="project-box float-right">
@@ -18,7 +18,7 @@
         <div slot="content">
             <el-tabs type="border-card" @tab-click="changeTab">
                 <el-tab-pane v-for="tab in tabMenu" :label="tab.label" :key="tab.index" lazy>
-                    <task-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" :showDeleted="showDeleted" />
+                    <task-list :index="tab.index" :activedIndex="activedIndex" :condition="condition" :showDeleted="showDeleted"/>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -48,6 +48,7 @@ export default {
             taskConsitionTypes: [
                 [],
                 [{ name: 'status', value: 'doing' }],
+                [{ name: 'status', value: 'wait' }],
                 [{ name: 'status', value: 'done' }],
                 [{ name: 'status', value: 'cancel' }],
                 [{ name: 'status', value: 'pause' }]
