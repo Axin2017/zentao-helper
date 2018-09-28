@@ -54,8 +54,16 @@ export default {
         dateFormatter(row, column) {
             if (row[column.property]) {
                 const d = new Date(row[column.property]);
-                return `${d.getFullYear()}-${d.getMonth() +
-                    1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                let timeStr = `${d.getFullYear()}-${d.getMonth() +
+                    1}-${d.getDate()}`;
+                if (
+                    d.getHours() != 0 ||
+                    d.getMinutes() != 0 ||
+                    d.getSeconds() != 0
+                ) {
+                    timeStr += ` ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                }
+                return timeStr;
             } else {
                 return '';
             }
@@ -68,13 +76,13 @@ export default {
                 return 0;
             } else {
                 return (
-                    (row.consumed / (row.consumed+row.left) * 100).toFixed() +
+                    (row.consumed / (row.consumed + row.left) * 100).toFixed() +
                     '%'
                 );
             }
         },
         judgeDeadline(taskList) {
-            const now=new Date();
+            const now = new Date();
             return taskList.map(task => {
                 const column = { property: 'deadline' };
                 const formatedDate = this.dateFormatter(task, column);
@@ -86,7 +94,7 @@ export default {
                     task.status != 'closed'
                 ) {
                     //当天不算超期
-                    if (Math.round((deadDate-now)/1000/60/60/24)+1 < 0) {
+                    if (this.getDaysLeft(deadDate, true, now) <= 0) {
                         task._isDead = true;
                     }
                 }
@@ -131,7 +139,7 @@ export default {
             this.loading = false;
         }
     },
-    components:{
+    components: {
         TimeLeft
     }
 };

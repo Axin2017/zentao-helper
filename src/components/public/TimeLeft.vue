@@ -15,14 +15,11 @@ export default {
         };
     },
     created() {
-        const now = new Date();
         let deadDate = null;
         if (this.deadtime) {
             deadDate = new Date(this.deadtime);
             if (deadDate != 'Invalid date') {
-                this.day =
-                    Math.round((deadDate - now) / 1000 / 60 / 60 / 24) +
-                    (this.containsToday ? 2 : 1);
+                this.day =this.getDaysLeft(deadDate);
                 this.setComponentShow(this.day);
                 this.setTimeColor(this.day);
             }
