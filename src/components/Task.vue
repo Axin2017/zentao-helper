@@ -39,15 +39,15 @@ export default {
         return {
             currentUser: '',
             currentUserCondition: [],
-            currentTaskTypeCondition: [],
+            currentTaskTypeCondition: [{ name: 'status', value: 'doing' }],//默认显示待办
             currentProjectIdCondition: [],
             currentShowDeletedCondition: [{ name: 'deleted', value: '0' }],//默认显示未删除
             currentProjectId: '',
             activedIndex: 0,
             showDeleted: false,
             taskConsitionTypes: [
-                [],
                 [{ name: 'status', value: 'doing' }],
+                [],
                 [{ name: 'status', value: 'wait' }],
                 [{ name: 'status', value: 'done' }],
                 [{ name: 'status', value: 'cancel' }],

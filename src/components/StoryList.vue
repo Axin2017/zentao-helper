@@ -45,8 +45,16 @@ export default {
         dateFormatter(row, column) {
             if (row[column.property]) {
                 const d = new Date(row[column.property]);
-                return `${d.getFullYear()}-${d.getMonth() +
-                    1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                let timeStr = `${d.getFullYear()}-${d.getMonth() +
+                    1}-${d.getDate()}`;
+                if (
+                    d.getHours() != 0 ||
+                    d.getMinutes() != 0 ||
+                    d.getSeconds() != 0
+                ) {
+                    timeStr += ` ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+                }
+                return timeStr;
             } else {
                 return '';
             }

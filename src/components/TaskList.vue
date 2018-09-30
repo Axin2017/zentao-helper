@@ -23,12 +23,12 @@
             </el-table-column>
             <el-table-column prop="lastediteddate" label="最后编辑时间" :formatter="dateFormatter" sortable>
             </el-table-column>
-            <el-table-column prop="left" label="进度百分比" :formatter="donePercentFormatter" sortable>
+            <el-table-column prop="left" label="进度百分比" :formatter="donePercentFormatter">
             </el-table-column>
-            <el-table-column label="截止时间" sortable>
+            <el-table-column label="截止时间" prop="deadline" sortable>
                 <template slot-scope="scope">
-                    <span :class="{dead:scope.row._isDead}">{{ scope.row.deadline }}</span>
-                    <time-left v-if="'done,closed'.indexOf(scope.row.status)==-1" :deadtime="scope.row.deadline" :containsToday="true"></time-left>
+                    <span :class="{dead:scope.row._isDead}">{{ scope.row.deadlineStr }}</span>
+                    <time-left v-if="isNomalCase(scope.row)" :deadtime="scope.row.deadline" :containsToday="true"></time-left>
                 </template>
             </el-table-column>
             <el-table-column prop="deleted" label="是否删除" v-if="showDeleted" sortable>
@@ -81,18 +81,21 @@ export default {
                 );
             }
         },
+        isNomalCase(task) {
+            return (
+                task.status != 'done' &&
+                task.status != 'closed' &&
+                task.deleted != '1'
+            );
+        },
         judgeDeadline(taskList) {
             const now = new Date();
             return taskList.map(task => {
                 const column = { property: 'deadline' };
                 const formatedDate = this.dateFormatter(task, column);
-                task.deadline = formatedDate;
+                task.deadlineStr = formatedDate;
                 const deadDate = new Date(formatedDate);
-                if (
-                    deadDate != 'Invalid Date' &&
-                    task.status != 'done' &&
-                    task.status != 'closed'
-                ) {
+                if (deadDate != 'Invalid Date' && this.isNomalCase(task)) {
                     //当天不算超期
                     if (this.getDaysLeft(deadDate, true, now) <= 0) {
                         task._isDead = true;
