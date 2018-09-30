@@ -15,15 +15,7 @@ export default {
         };
     },
     created() {
-        let deadDate = null;
-        if (this.deadtime) {
-            deadDate = new Date(this.deadtime);
-            if (deadDate != 'Invalid date') {
-                this.day =this.getDaysLeft(deadDate);
-                this.setComponentShow(this.day);
-                this.setTimeColor(this.day);
-            }
-        }
+        this.init();
     },
     methods: {
         setTimeColor(day) {
@@ -35,6 +27,28 @@ export default {
             if (day > 0 && day < 4) {
                 this.show = true;
             }
+        },
+        init() {
+            let deadDate = null;
+            if (this.deadtime) {
+                deadDate = new Date(this.deadtime);
+                if (deadDate != 'Invalid date') {
+                    this.day = this.getDaysLeft(deadDate);
+                    this.setComponentShow(this.day);
+                    this.setTimeColor(this.day);
+                }
+            }
+        },
+        reload() {
+            this.timecolor = '';
+            this.day = '';
+            this.show = false;
+        }
+    },
+    watch: {
+        deadtime() {
+            this.reload();
+            this.init();
         }
     }
 };
@@ -51,15 +65,15 @@ export default {
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 50%;
-    color:#000;
+    color: #000;
 }
 .day1 {
-    background-color:  red;
+    background-color: red;
 }
 .day2 {
-    background-color:  yellow;
+    background-color: yellow;
 }
 .day3 {
-    background-color:  violet;
+    background-color: violet;
 }
 </style>
