@@ -12,6 +12,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.use(window.zentaoConfig);
 Vue.use(plugin);
+
 new Vue({
   el: '#app',
   router,
