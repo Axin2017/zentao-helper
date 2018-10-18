@@ -1,5 +1,3 @@
-import { EOVERFLOW } from "constants";
-
 export default {
   install: function(Vue, option) {
     Vue.prototype.getDaysLeft = (

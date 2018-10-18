@@ -50,18 +50,18 @@ export default {
             currentShowDeletedCondition: [{ name: 'deleted', value: '0' }], //默认显示未删除
             storyTime: '',
             storyTimeCondition: [],
-            storyTypesCondition:[{ name: 'status', value: 'developing' }],//默认显示正在研发
+            storyTypesCondition:[{ name: 'stage', value: 'developing' }],//默认显示正在研发
             storyTypesConsition: [
-                [{ name: 'status', value: 'developing' }],
+                [{ name: 'stage', value: 'developing' }],
                 [],
-                [{ name: 'status', value: 'wait' }],
-                [{ name: 'status', value: 'testing' }],
-                [{ name: 'status', value: 'tested' }],
-                [{ name: 'status', value: 'projected' }],
-                [{ name: 'status', value: 'released' }],
-                [{ name: 'status', value: 'developed' }],
-                [{ name: 'status', value: 'closed' }],
-                [{ name: 'status', value: 'cancel' }]
+                [{ name: 'stage', value: 'wait' }],
+                [{ name: 'stage', value: 'testing' }],
+                [{ name: 'stage', value: 'tested' }],
+                [{ name: 'stage', value: 'projected' }],
+                [{ name: 'stage', value: 'released' }],
+                [{ name: 'stage', value: 'developed' }],
+                [{ name: 'stage', value: 'closed' }],
+                [{ name: 'stage', value: 'cancel' }]
             ],
             storyTimeOption: {
                 shortcuts: [
