@@ -33,7 +33,7 @@ export default {
             if (this.deadtime) {
                 deadDate = new Date(this.deadtime);
                 if (deadDate != 'Invalid date') {
-                    this.day = this.getDaysLeft(deadDate);
+                    this.day = this.getDaysLeft(deadDate,this.containsToday);
                     this.setComponentShow(this.day);
                     this.setTimeColor(this.day);
                 }
